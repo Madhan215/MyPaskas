@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DistributionController extends Controller
@@ -51,15 +52,25 @@ class DistributionController extends Controller
         $fotoBukti = null;
         $fotoWatermark = null;
 
-        if ($request->hasFile('foto_bukti')) {
-            $file = $request->file('foto_bukti');
-            $filename = 'aktivitas_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/aktivitas'), $filename);
-            $fotoBukti = 'uploads/aktivitas/' . $filename;
 
-            // Buat watermark menggunakan GD
+        // Upload foto bukti
+        if ($request->hasFile('foto_bukti')) {
+
+            $file = $request->file('foto_bukti');
+
+            $filename = 'aktivitas_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+
+            // simpan ke storage/app/public/aktivitas
+            $path = $file->storeAs('aktivitas', $filename, 'public');
+
+            $fotoBukti = $path;
+
+            // path asli file di storage (untuk watermark)
+            $fullPath = storage_path('app/public/' . $path);
+
+            // Buat watermark
             $fotoWatermark = $this->addWatermark(
-                public_path($fotoBukti),
+                $fullPath,
                 $jadwal->pondok->nama,
                 $jadwal->pondok->alamat,
                 $request->tanggal_distribusi,
@@ -127,11 +138,13 @@ class DistributionController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        if ($fotoWatermark && file_exists(public_path($fotoWatermark))) {
+        if ($fotoWatermark && Storage::disk('public')->exists($fotoWatermark)) {
+
+            $fullPath = Storage::disk('public')->path($fotoWatermark);
 
             Http::attach(
                 'photo',
-                fopen(public_path($fotoWatermark), 'r'),
+                fopen($fullPath, 'r'),
                 basename($fotoWatermark)
             )->post(
                     'https://api.telegram.org/bot' . config('services.telegram.bot_token') . '/sendPhoto',
@@ -141,7 +154,6 @@ class DistributionController extends Controller
                         'parse_mode' => 'HTML',
                     ]
                 );
-
         } else {
 
             /*
@@ -225,7 +237,7 @@ class DistributionController extends Controller
             imagedestroy($src);
             imagedestroy($dst);
 
-            return 'uploads/aktivitas/' . $wmFilename;
+            return 'aktivitas/' . $wmFilename;
         } catch (\Throwable $e) {
             return null;
         }

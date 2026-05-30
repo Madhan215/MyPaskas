@@ -21,11 +21,12 @@
                     <i class="bi bi-image text-success me-2"></i>Foto Bukti Penyaluran
                 </div>
                 <div class="card-body p-2 text-center">
-                    <img src="{{ asset($aktivitas->foto_watermark ?? $aktivitas->foto_bukti) }}" class="img-fluid rounded-3"
-                        style="max-height: 400px; width: 100%; object-fit: contain;" alt="Foto Bukti">
-                    @if ($aktivitas->foto_watermark && $aktivitas->foto_bukti)
+                    <img src="{{ asset('storage/' . $aktivitas->foto_watermark ?? 'storage/' . $aktivitas->foto_bukti) }}"
+                        class="img-fluid rounded-3" style="max-height: 400px; width: 100%; object-fit: contain;"
+                        alt="Foto Bukti">
+                    @if ('storage/' . $aktivitas->foto_watermark && 'storage/' . $aktivitas->foto_bukti)
                         <div class="mt-2">
-                            <a href="{{ asset($aktivitas->foto_bukti) }}" target="_blank"
+                            <a href="{{ asset('storage/' . $aktivitas->foto_bukti) }}" target="_blank"
                                 class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-image me-1"></i>Lihat Foto Asli
                             </a>

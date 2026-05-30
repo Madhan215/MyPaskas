@@ -330,7 +330,8 @@
             @forelse($aktivitasTerbaru as $a)
                 <div class="feed-item">
                     @if ($a->foto_watermark || $a->foto_bukti)
-                        <img src="{{ asset($a->foto_watermark ?? $a->foto_bukti) }}" class="feed-photo">
+                        <img src="{{ asset('storage/' . $a->foto_watermark ?? 'storage/' . $a->foto_bukti) }}"
+                            class="feed-photo">
                     @else
                         <div class="feed-icon">🌾</div>
                     @endif

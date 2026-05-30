@@ -26,7 +26,7 @@
                     <div class="card-body p-3">
                         <div class="d-flex align-items-start gap-3">
                             @if ($a->foto_watermark || $a->foto_bukti)
-                                <img src="{{ asset($a->foto_watermark ?? $a->foto_bukti) }}"
+                                <img src="{{ asset('storage/' . $a->foto_watermark ?? 'storage/' . $a->foto_bukti) }}"
                                     style="width:64px;height:64px;object-fit:cover;border-radius:10px;flex-shrink:0">
                             @else
                                 <div

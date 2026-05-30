@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, Hash};
+use Illuminate\Support\Facades\Storage;
 
 class ProfilController extends Controller
 {
@@ -38,19 +40,21 @@ class ProfilController extends Controller
 
         // Upload foto profil
         if ($request->hasFile('foto_profil')) {
-            // Hapus foto lama
-            if ($user->foto_profil && file_exists(public_path($user->foto_profil))) {
-                @unlink(public_path($user->foto_profil));
-            }
 
-            if (!is_dir(public_path('uploads/profil'))) {
-                mkdir(public_path('uploads/profil'), 0755, true);
+            // Hapus foto lama
+            if ($user->foto_profil && Storage::disk('public')->exists($user->foto_profil)) {
+                Storage::disk('public')->delete($user->foto_profil);
             }
 
             $file = $request->file('foto_profil');
+
             $filename = 'profil_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/profil'), $filename);
-            $data['foto_profil'] = 'uploads/profil/' . $filename;
+
+            // simpan ke storage/app/public/profil
+            $path = $file->storeAs('profil', $filename, 'public');
+
+            // simpan path ke database
+            $data['foto_profil'] = $path;
         }
 
         $user->update($data);

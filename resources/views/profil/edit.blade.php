@@ -20,7 +20,7 @@
 
                     <!-- Foto Profil -->
                     <div class="text-center mb-4">
-                        <img src="{{ $user->foto_profil ? asset($user->foto_profil) : asset('uploads/profil/default.png') }}"
+                        <img src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : asset('default.png') }}"
                             id="preview-profil"
                             style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid #dcfce7;margin-bottom:12px">
                         <div>

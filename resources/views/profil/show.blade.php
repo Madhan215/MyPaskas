@@ -9,7 +9,7 @@
         <!-- Profil Card -->
         <div class="card mb-3">
             <div class="card-body p-4 text-center">
-                <img src="{{ $user->foto_profil ? asset($user->foto_profil) : asset('uploads/profil/default.png') }}"
+                <img src="{{ $user->foto_profil ? asset('storage/' . $user->foto_profil) : asset('default.png') }}"
                     style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid #dcfce7;margin-bottom:12px">
                 <div class="fw-bold fs-4">{{ $user->name }}</div>
                 <div class="mb-2">

@@ -29,7 +29,7 @@
                 <div class="card-body p-0">
                     @foreach ($list as $u)
                         <div class="d-flex align-items-center p-3 border-bottom gap-3">
-                            <img src="{{ !empty($u->foto_profil) ? asset($u->foto_profil) : asset('uploads/profil/default.png') }}"
+                            <img src="{{ !empty($u->foto_profil) ? asset('storage/' . $u->foto_profil) : asset('default.png') }}"
                                 style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0">
                             <div class="flex-grow-1">
                                 <div class="fw-bold">{{ $u->name }}</div>

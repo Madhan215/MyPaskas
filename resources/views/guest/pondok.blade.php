@@ -151,8 +151,8 @@
                         </div>
                     </div>
                     @if ($a->foto_watermark || $a->foto_bukti)
-                        <img src="{{ asset($a->foto_watermark ?? $a->foto_bukti) }}" class="img-fluid rounded-3 mt-2"
-                            style="max-height:200px;width:100%;object-fit:cover">
+                        <img src="{{ asset('storage/' . $a->foto_watermark ?? 'storage/' . $a->foto_bukti) }}"
+                            class="img-fluid rounded-3 mt-2" style="max-height:200px;width:100%;object-fit:cover">
                     @endif
                 </div>
             </div>

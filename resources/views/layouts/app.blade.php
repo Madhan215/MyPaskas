@@ -340,7 +340,7 @@
                     <div
                         style="width:42px;height:42px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,0.3);flex-shrink:0">
 
-                        <img src="{{ Auth::user()->foto_profil ? asset(Auth::user()->foto_profil) : asset('uploads/profil/default.png') }}"
+                        <img src="{{ Auth::user()->foto_profil ? asset('storage/' . Auth::user()->foto_profil) : asset('default.png') }}"
                             alt="Foto Profil" style="width:100%;height:100%;object-fit:cover">
 
                     </div>
