@@ -48,9 +48,9 @@
                                     @if (!$u->is_active)
                                         <span class="badge bg-danger">Non-aktif</span>
                                     @endif
-                                    @if ($u->pondok)
+                                    {{-- @if ($u->pondok)
                                         <span class="badge bg-warning text-dark">{{ $u->pondok->nama }}</span>
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                             <div class="dropdown">
