@@ -138,9 +138,7 @@
 
                     <div class="mb-4 text-center">
 
-                        <div style="font-size:70px;">
-                            🌾
-                        </div>
+                        <img src="{{ asset('icon.png') }}" height="90px" alt="Logo">
 
                     </div>
 
@@ -190,9 +188,7 @@
                     {{-- Mobile Logo --}}
                     <div class="text-center d-md-none mb-4">
 
-                        <div style="font-size:60px;">
-                            🌾
-                        </div>
+                        <img src="{{ asset('icon.png') }}" height="60px" alt="Logo">
 
                         <h3 class="fw-bold text-success mt-2">
                             My PASKAS
@@ -283,7 +279,7 @@
                     </form>
 
                     {{-- Demo --}}
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
 
                         <small class="text-muted fw-semibold">
                             🔑 Akun Demo
@@ -295,11 +291,11 @@
                             <code>admin123</code>
                         </div>
 
-                        {{-- <div class="small">
+                        <div class="small">
                             <strong>OTA:</strong>
                             ota@ota.paskas.my.id |
                             <code>ota123</code>
-                        </div> --}}
+                        </div>
 
                         <div class="small">
                             <strong>Paskas:</strong>
@@ -307,7 +303,7 @@
                             <code>paskas123</code>
                         </div>
 
-                    </div>
+                    </div> --}}
 
                 </div>
 

@@ -213,6 +213,21 @@
             align-items: center;
             gap: 8px;
         }
+
+        .hero-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-icon img {
+            width: 120px;
+            /* atur sesuai kebutuhan */
+            height: auto;
+
+            /* efek bayangan putih */
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+        }
     </style>
 </head>
 
@@ -220,7 +235,8 @@
 
     <!-- TOP NAV -->
     <nav class="top-nav">
-        <a href="{{ route('guest.index') }}" class="brand">🌾 Distribusi Beras</a>
+        <a href="{{ route('guest.index') }}" class="brand"><img src="{{ asset('icon.png') }}" alt="Logo"
+                style="height:24px; margin-right:6px;"> My Paskas</a>
 
         @auth
             <a href="{{ route('dashboard') }}" class="btn-login-nav">
@@ -235,7 +251,9 @@
 
     <!-- HERO -->
     <div class="hero">
-        <div class="hero-icon">🌾</div>
+        <div class="hero-icon mb-2">
+            <img src="{{ asset('icon.png') }}" alt="Logo">
+        </div>
         <div class="hero-title">Distribusi Beras<br>Pondok Pesantren</div>
         <div class="hero-sub">Transparansi penyaluran beras untuk santri dan yayasan</div>
         <div class="hero-btn">
