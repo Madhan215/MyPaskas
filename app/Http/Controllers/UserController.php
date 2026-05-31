@@ -15,7 +15,9 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('pondok')->orderBy('role')->orderBy('name')->get();
+        $users = User::orderBy('role')
+            ->orderBy('name')
+            ->get();
         return view('user.index', compact('users'));
     }
 
