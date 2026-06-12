@@ -80,6 +80,8 @@ class DistributionController extends Controller
 
             $fotoBukti = 'aktivitas/' . $filename;
 
+            $jam = now()->format('H:i:s');
+
             // Watermark
             $fotoWatermark = $this->addWatermark(
                 $path,
@@ -87,7 +89,8 @@ class DistributionController extends Controller
                 Str::limit($jadwal->pondok->alamat, 30, '...'),
                 $jadwal->pondok->nama,
                 $request->tanggal_distribusi,
-                Auth::user()->name
+                Auth::user()->name,
+                $jam,
             );
         }
 
@@ -202,7 +205,8 @@ class DistributionController extends Controller
         string $alamat,
         string $pondok,
         string $tanggal,
-        string $petugas
+        string $petugas,
+        string $jam
     ): ?string {
 
         if (!extension_loaded('gd')) {
@@ -291,8 +295,7 @@ class DistributionController extends Controller
                 $y1 + 80,
                 $textColor,
                 $fontFile,
-                "• Seri : $seri
-"
+                "• Seri : $seri"
             );
 
             imagettftext(
@@ -325,7 +328,7 @@ class DistributionController extends Controller
                 $y1 + 170,
                 $textColor,
                 $fontFile,
-                "• Tanggal : $tanggalFormatted"
+                "• Tanggal : $tanggalFormatted ($jam WITA)"
             );
 
             imagettftext(
