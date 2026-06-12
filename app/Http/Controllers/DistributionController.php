@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\{Distribution, Plan};
+use App\Models\Series;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\ImageManager;
 
 class DistributionController extends Controller
 {
@@ -53,26 +57,35 @@ class DistributionController extends Controller
         $fotoWatermark = null;
 
 
-        // Upload foto bukti
         if ($request->hasFile('foto_bukti')) {
 
             $file = $request->file('foto_bukti');
 
-            $filename = 'aktivitas_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            $filename = 'aktivitas_' . time() . '_' . Str::random(8) . '.jpg';
 
-            // simpan ke storage/app/public/aktivitas
-            $path = $file->storeAs('aktivitas', $filename, 'public');
+            $manager = new ImageManager(new Driver());
 
-            $fotoBukti = $path;
+            $image = $manager->decode($file);
 
-            // path asli file di storage (untuk watermark)
-            $fullPath = storage_path('app/public/' . $path);
+            // Resize jika terlalu besar
+            $image->scaleDown(width: 1080);
 
-            // Buat watermark
+            $path = storage_path('app/public/aktivitas/' . $filename);
+
+            // Simpan JPEG kualitas 70%
+            $image->save(
+                $path,
+                new JpegEncoder(quality: 50)
+            );
+
+            $fotoBukti = 'aktivitas/' . $filename;
+
+            // Watermark
             $fotoWatermark = $this->addWatermark(
-                $fullPath,
+                $path,
+                $jadwal->seri->nama,
                 $jadwal->pondok->nama,
-                $jadwal->pondok->alamat,
+                Str::limit($jadwal->pondok->alamat, 30, '...'),
                 $request->tanggal_distribusi,
                 Auth::user()->name
             );
@@ -183,61 +196,173 @@ class DistributionController extends Controller
         return view('distribution.show', compact('aktivitas'));
     }
 
-    private function addWatermark(string $imagePath, string $pondok, string $alamat, string $tanggal, string $petugas): ?string
-    {
-        if (!extension_loaded('gd'))
+    private function addWatermark(
+        string $imagePath,
+        string $seri,
+        string $alamat,
+        string $pondok,
+        string $tanggal,
+        string $petugas
+    ): ?string {
+
+        if (!extension_loaded('gd')) {
             return null;
+        }
 
         try {
+
             $info = getimagesize($imagePath);
-            if (!$info)
+            if (!$info) {
                 return null;
+            }
 
             $mime = $info['mime'];
+
             $src = match ($mime) {
                 'image/jpeg' => imagecreatefromjpeg($imagePath),
                 'image/png' => imagecreatefrompng($imagePath),
                 default => null,
             };
-            if (!$src)
+
+            if (!$src) {
                 return null;
+            }
 
             $w = imagesx($src);
             $h = imagesy($src);
 
-            // Panel watermark di bawah
-            $panelH = 80;
-            $dst = imagecreatetruecolor($w, $h + $panelH);
+            // Aktifkan alpha transparency
+            imagealphablending($src, true);
+            imagesavealpha($src, true);
 
-            // Copy gambar asli
-            imagecopy($dst, $src, 0, 0, 0, 0, $w, $h);
+            $tanggalFormatted = Carbon::parse($tanggal)
+                ->locale('id')
+                ->translatedFormat('l, d F Y');
 
-            // Panel hijau tua
-            $bgColor = imagecolorallocate($dst, 22, 101, 52);
-            $textColor = imagecolorallocate($dst, 255, 255, 255);
-            imagefilledrectangle($dst, 0, $h, $w, $h + $panelH, $bgColor);
 
-            $font = 5; // built-in font
-            $tanggalFormatted = date('d/m/Y', strtotime($tanggal));
+            // Ukuran kotak watermark (tetap)
+            $boxWidth = 750;
+            $boxHeight = 250;
+            $padding = 12;
 
-            imagestring($dst, $font, 10, $h + 8, "Pondok : $pondok", $textColor);
-            imagestring($dst, $font, 10, $h + 26, "Alamat : $alamat", $textColor);
-            imagestring($dst, $font, 10, $h + 44, "Tanggal: $tanggalFormatted", $textColor);
-            imagestring($dst, $font, 10, $h + 62, "Petugas: $petugas", $textColor);
+            // Posisi kiri bawah
+            $x1 = 10;
+            $y1 = $h - $boxHeight - 10;
+            $x2 = $x1 + $boxWidth;
+            $y2 = $y1 + $boxHeight;
+
+            // Hitam transparan
+            $bgColor = imagecolorallocatealpha($src, 0, 0, 0, 60);
+
+            // Putih
+            $textColor = imagecolorallocate($src, 255, 255, 255);
+
+            // Kotak watermark
+            imagefilledrectangle(
+                $src,
+                $x1,
+                $y1,
+                $x2,
+                $y2,
+                $bgColor
+            );
+
+            $font = 5;
+            $fontFile = public_path('fonts/Poppins-Regular.ttf');
+
+            // Makin rendah nilai nya, maka makin tingg
+
+            imagettftext(
+                $src,
+                24,
+                0,
+                $x1 + $padding,
+                $y1 + 30,
+                $textColor,
+                $fontFile,
+                'Distribusi Beras Paskas Banjarmasin'
+            );
+
+            imagettftext(
+                $src,
+                22,
+                0,
+                $x1 + $padding,
+                $y1 + 80,
+                $textColor,
+                $fontFile,
+                "• Seri : $seri
+"
+            );
+
+            imagettftext(
+                $src,
+                22,
+                0,
+                $x1 + $padding,
+                $y1 + 110,
+                $textColor,
+                $fontFile,
+                "• Pondok : $pondok"
+            );
+
+            imagettftext(
+                $src,
+                22,
+                0,
+                $x1 + $padding,
+                $y1 + 140,
+                $textColor,
+                $fontFile,
+                "• Alamat : $alamat"
+            );
+
+            imagettftext(
+                $src,
+                22,
+                0,
+                $x1 + $padding,
+                $y1 + 170,
+                $textColor,
+                $fontFile,
+                "• Tanggal : $tanggalFormatted"
+            );
+
+            imagettftext(
+                $src,
+                22,
+                0,
+                $x1 + $padding,
+                $y1 + 200,
+                $textColor,
+                $fontFile,
+                "• Petugas : $petugas"
+            );
+
+            imagettftext(
+                $src,
+                18,
+                0,
+                $x1 + $padding,
+                $y1 + 240,
+                $textColor,
+                $fontFile,
+                'Generated by : MyPaskas'
+            );
 
             $wmFilename = 'wm_' . basename($imagePath);
             $wmPath = dirname($imagePath) . '/' . $wmFilename;
 
             if ($mime === 'image/jpeg') {
-                imagejpeg($dst, $wmPath, 90);
+                imagejpeg($src, $wmPath, 70);
             } else {
-                imagepng($dst, $wmPath);
+                imagepng($src, $wmPath);
             }
 
             imagedestroy($src);
-            imagedestroy($dst);
 
             return 'aktivitas/' . $wmFilename;
+
         } catch (\Throwable $e) {
             return null;
         }
