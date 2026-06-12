@@ -84,8 +84,8 @@ class DistributionController extends Controller
             $fotoWatermark = $this->addWatermark(
                 $path,
                 $jadwal->seri->nama,
-                $jadwal->pondok->nama,
                 Str::limit($jadwal->pondok->alamat, 30, '...'),
+                $jadwal->pondok->nama,
                 $request->tanggal_distribusi,
                 Auth::user()->name
             );
