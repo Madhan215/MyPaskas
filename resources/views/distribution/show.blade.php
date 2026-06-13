@@ -157,7 +157,8 @@
                 <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar
             </a>
             @if ($aktivitas->foto_watermark)
-                <a href="{{ asset($aktivitas->foto_watermark) }}" download class="btn btn-outline-success btn-lg">
+                <a href="{{ asset('storage/' . $aktivitas->foto_watermark) }}" download
+                    class="btn btn-outline-success btn-lg">
                     <i class="bi bi-download me-2"></i>Unduh Foto Bukti
                 </a>
             @endif

@@ -12,10 +12,10 @@ class DatabaseSeeder extends Seeder
 
             FoundationSeeder::class,
             UserSeeder::class,
-            SeriesSeeder::class,
-            StoksSeeder::class,
-            PlansSeeder::class,
-            DistributionsSeeder::class,
+            // SeriesSeeder::class,
+            // StoksSeeder::class,
+            // PlansSeeder::class,
+            // DistributionsSeeder::class,
         ]);
     }
 }
