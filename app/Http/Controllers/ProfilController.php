@@ -28,7 +28,7 @@ class ProfilController extends Controller
         $request->validate([
             'name'        => 'required|string|max:255',
             'phone'       => 'nullable|string|max:20',
-            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png,heif,heic',
         ], [
             'foto_profil.image' => 'File harus berupa gambar',
         ]);
