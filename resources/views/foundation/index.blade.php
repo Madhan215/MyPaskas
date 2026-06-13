@@ -130,8 +130,6 @@
         // fokus otomatis
         window.addEventListener('load', () => {
 
-            searchInput.focus();
-
             searchInput.setSelectionRange(
                 searchInput.value.length,
                 searchInput.value.length
