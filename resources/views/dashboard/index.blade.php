@@ -185,7 +185,7 @@
         @endif
 
         <!-- Quick Actions -->
-        <div class="row g-3">
+        <div class="row g-3" hidden>
             <div class="col-6">
                 <a href="{{ route('aktivitas.create') }}" class="btn btn-success btn-lg w-100">
                     <i class="bi bi-truck me-2"></i>Catat Penyaluran
