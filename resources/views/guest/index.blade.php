@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distribusi Beras - Informasi Publik</title>
+    <title>Sistem Manajemen Distribusi Beras</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -236,7 +236,7 @@
     <!-- TOP NAV -->
     <nav class="top-nav">
         <a href="{{ route('guest.index') }}" class="brand"><img src="{{ asset('icon.png') }}" alt="Logo"
-                style="height:24px; margin-right:6px;"> My Paskas</a>
+                style="height:24px; margin-right:6px;"> MyPaskas</a>
 
         @auth
             <a href="{{ route('dashboard') }}" class="btn-login-nav">
@@ -254,7 +254,7 @@
         <div class="hero-icon mb-2">
             <img src="{{ asset('icon.png') }}" alt="Logo">
         </div>
-        <div class="hero-title">Distribusi Beras<br>Pondok Pesantren</div>
+        <div class="hero-title">Sistem Manajemen<br>Distribusi Beras</div>
         <div class="hero-sub">Transparansi penyaluran beras untuk santri dan yayasan</div>
         <div class="hero-btn">
             @auth
@@ -404,7 +404,7 @@
 
         <!-- FOOTER -->
         <div class="text-center py-4 text-muted" style="font-size:0.85rem">
-            <div>🌾 Sistem Distribusi Beras</div>
+            <div>🌾<br>Sistem Manajemen Distribusi Beras</div>
 
             <div class="mt-1">
                 @auth

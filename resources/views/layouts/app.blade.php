@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'My Paskas') | Sistem Distribusi Beras</title>
+    <title>@yield('title', 'MyPaskas') | Sistem Distribusi Beras</title>
 
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
@@ -412,10 +412,10 @@
         <button class="btn btn-link text-white p-0 me-3" onclick="toggleSidebar()">
             <i class="bi bi-list" style="font-size:1.8rem"></i>
         </button>
-        <span class="navbar-brand mb-0">
+        <a href="{{ url('/') }}" class="navbar-brand mb-0 text-decoration-none">
             <img src="{{ asset('icon.png') }}" alt="Logo" style="height:24px; margin-right:6px;">
-            My Paskas
-        </span>
+            MyPaskas
+        </a>
         <div class="ms-auto d-none d-md-flex align-items-center gap-2">
             <a href="{{ route('aktivitas.create') }}" class="btn btn-warning btn-sm fw-bold">
 
