@@ -15,6 +15,27 @@
             @endif
         </div>
 
+        <!-- Grand Total -->
+        <div class="card mb-3" style="background:linear-gradient(135deg,#14532d,#166534);color:#fff">
+            <div class="card-body">
+                <div class="fw-bold mb-2 fs-5">📊 Grand Total</div>
+                <div class="row text-center g-2">
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jumlah_santri') }}</div>
+                        <div style="opacity:0.8;font-size:0.85rem">Total Santri</div>
+                    </div>
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jatah_kg') }}</div>
+                        <div style="opacity:0.8;font-size:0.85rem">Total KG</div>
+                    </div>
+                    <div class="col-4">
+                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jatah_karung') }}</div>
+                        <div style="opacity:0.8;font-size:0.85rem">Total Karung</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @php
             $kelompoks = $pondoks->groupBy('penanggung_jawab');
         @endphp
@@ -103,26 +124,7 @@
             </div>
         @endforeach
 
-        <!-- Grand Total -->
-        <div class="card" style="background:linear-gradient(135deg,#14532d,#166534);color:#fff">
-            <div class="card-body">
-                <div class="fw-bold mb-2 fs-5">📊 Grand Total</div>
-                <div class="row text-center g-2">
-                    <div class="col-4">
-                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jumlah_santri') }}</div>
-                        <div style="opacity:0.8;font-size:0.85rem">Total Santri</div>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jatah_kg') }}</div>
-                        <div style="opacity:0.8;font-size:0.85rem">Total KG</div>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size:1.8rem;font-weight:800">{{ $pondoks->sum('jatah_karung') }}</div>
-                        <div style="opacity:0.8;font-size:0.85rem">Total Karung</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
     <script>
         const searchInput = document.getElementById('search-input');

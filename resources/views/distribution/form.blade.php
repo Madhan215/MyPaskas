@@ -15,6 +15,10 @@
 
         <div class="card">
             <div class="card-body p-4">
+                @if ($seriAktif)
+                    <h5 class="ms-auto">{{ $seriAktif->nama }}</h5>
+                    <hr>
+                @endif
                 <form method="POST" action="{{ route('aktivitas.store') }}" enctype="multipart/form-data"
                     id="form-aktivitas">
                     @csrf
@@ -135,12 +139,12 @@
                     sel.dataset.maps
                     ?
                     `<div>
-                                        <a href="${sel.dataset.maps}"
-                                            target="_blank"
-                                            class="btn btn-sm btn-outline-success mt-1">
-                                            <i class="bi bi-map-fill me-1"></i>Lihat Maps
-                                        </a>
-                                    </div>`
+                                                                        <a href="${sel.dataset.maps}"
+                                                                            target="_blank"
+                                                                            class="btn btn-sm btn-outline-success mt-1">
+                                                                            <i class="bi bi-map-fill me-1"></i>Lihat Maps
+                                                                        </a>
+                                                                    </div>`
                     :
                     ''
                 }

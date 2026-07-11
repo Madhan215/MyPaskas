@@ -28,12 +28,16 @@ class DistributionController extends Controller
     public function create(Request $request)
     {
         $jadwalId = $request->get('jadwal_id');
+        $seriAktif = Series::where('status', 'aktif')->first();
         $jadwal = $jadwalId ? Plan::with('pondok', 'seri')->findOrFail($jadwalId) : null;
         $jadwals = Plan::with(['pondok', 'seri'])
             ->where('status', 'belum')
+            ->whereHas('seri', function ($q) {
+                $q->where('status', 'aktif');
+            })
             ->orderBy('tanggal')
             ->get();
-        return view('distribution.form', compact('jadwal', 'jadwals'));
+        return view('distribution.form', compact('jadwal', 'jadwals', 'seriAktif'));
     }
 
     public function store(Request $request)
