@@ -15,7 +15,11 @@ class DashboardController extends Controller
         $seriAktif = Series::where('status', 'aktif')->first();
 
         $totalSantri = Foundation::where('is_active', true)->sum('jumlah_santri');
-        $jadwalBelum = Plan::where('status', 'belum')->count();
+        $jadwalBelum = Plan::where('status', 'belum')
+            ->whereHas('seri', function ($q) {
+                $q->where('status', 'aktif');
+            })
+            ->count();
         $jadwalSelesai = Plan::where('status', 'selesai')->count();
         $totalKgDisalurkan = Distribution::sum('jumlah_kg_distribusi');
 
